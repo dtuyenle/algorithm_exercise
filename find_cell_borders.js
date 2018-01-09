@@ -84,3 +84,38 @@ while (row < image.length) {
 
 console.log(group);
 console.log(count);
+
+
+// DFS
+
+const isSafe = (matrix, row, col, visited) => row >= 0 && col >= 0 && row < matrix.length && col < matrix[row].length && matrix[row][col] === 1 && !visited[row][col];
+
+const DFS = (matrix, row, col, visited) => {
+	const rowNbr = [-1, -1, -1,  0, 0,  1, 1, 1];
+	const colNbr = [-1,  0,  1, -1, 1, -1, 0, 1];
+	visited[row][col] = true;
+
+	for(let i = 0; i < 8; i++) {
+		if (isSafe(matrix, row + rowNbr[i], col + colNbr[i], visited)) {
+			DFS(matrix, row + rowNbr[i], col + colNbr[i], visited);
+		}
+	}
+}
+
+const countIslands = (matrix) => {
+	const visited = matrix.map(row => row.map(col => false));
+	let count = 0;
+
+	matrix.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
+			if (matrix[rowIndex][colIndex] === 1 && !visited[rowIndex][colIndex]) {
+				DFS(matrix, rowIndex, colIndex, visited);
+				count++;
+			}
+		});
+	});
+	console.log(visited);
+	return count;
+}
+
+
